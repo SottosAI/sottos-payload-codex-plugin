@@ -19,6 +19,7 @@ https://sottos-web.vercel.app/api/payload/mcp
 
 - Create and update blog drafts.
 - Upload and update cover images.
+- Fetch compact draft context in one call.
 - Show current cover images to the agent as visual style references.
 - Manage tags and categories.
 - Read existing posts, media, tags, and categories.
@@ -98,7 +99,7 @@ cursor-agent mcp login sottos-payload
 Ask the agent for a draft. It should:
 
 1. Read existing tags/categories.
-2. Call `getMediaReferences` to inspect current Sottos cover style.
+2. Call `getBlogDraftContext` to get posts, tags, categories, and cover references in one request.
 3. Generate a 16:10 cover image with the best image model/tool available in the current agent.
 4. Base64 encode the image and upload it with `uploadMedia` and descriptive alt text.
 5. Create the post as a draft.
@@ -111,8 +112,8 @@ stop before creating the post.
 Post drafts need: title, excerpt, cover image, and body content. Slugs can
 auto-fill from the title. Future `publishedAt` dates schedule publishing.
 
-Use `getMediaReferences` before generating covers. It returns compact metadata
-and image blocks so the agent can match the current Sottos editorial style.
+Use `getBlogDraftContext` before drafting. It returns compact inventory and
+cover reference images. Avoid reading full post bodies unless explicitly needed.
 
 Media uploads are image-only. Use `uploadMedia`, not generated `createMedia`,
 for new files. Alt text is required; captions and credits are optional. Uploads

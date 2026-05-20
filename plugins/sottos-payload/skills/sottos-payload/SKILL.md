@@ -38,6 +38,7 @@ This should open Sottos admin login. If an admin session exists, it uses `https:
 - `findCategories`
 - `createCategories`
 - `updateCategories`
+- `getBlogDraftContext`
 - `findMedia`
 - `getMediaReferences`
 - `uploadMedia`
@@ -55,7 +56,9 @@ There should be no users tools. Delete tools should normally be absent. If a del
 - Never print or commit credentials.
 - If auth fails, use the MCP OAuth login flow first: `codex mcp login sottos-payload`.
 - Auth must come from the current Sottos Clerk admin user. Do not use MCP API-key or bearer-token fallback instructions.
-- For new cover images, call `getMediaReferences` first so the agent can see current Sottos cover-image style, then use the best image-generation model/tool available in the current host agent, base64 encode the resulting local image, and upload it with `uploadMedia`.
+- For new draft posts, call `getBlogDraftContext` first. It replaces separate inventory reads and returns cover-image style references.
+- Do not read full existing post bodies just to learn the content shape. Build Lexical content directly with root/paragraph/heading/list/link nodes.
+- For new cover images, use the references from `getBlogDraftContext`, then use the best image-generation model/tool available in the current host agent, base64 encode the resulting local image, and upload it with `uploadMedia`.
 - Stay agent-agnostic: Codex/ChatGPT should use their strongest available image-generation capability; Claude/Cursor should use the best configured image-generation tool or connected image MCP available. If no image generator is available, write the exact image prompt and stop before creating the post.
 - Do not fall back to REST, SQL, raw `curl`, seed scripts, or local env-secret workflows for media upload unless the user explicitly approves.
 - Preserve rollback: Sottos posts use Payload drafts/version history. Do not hard-delete or overwrite published content when a draft/update path is available.
@@ -86,14 +89,13 @@ Find a post by slug:
 
 ## Draft Workflow
 
-1. Search tags and categories first.
+1. Call `getBlogDraftContext` first. If unavailable, fall back to compact `findPosts`, `findTags`, `findCategories`, and `getMediaReferences`.
 2. Create missing tags/categories only when needed.
-3. For posts needing a new cover image, call `getMediaReferences` and inspect the returned image blocks/metadata before prompting image generation. If this tool is unavailable, use `findMedia` URLs as a weaker fallback.
-4. Generate a 16:10 image locally using the strongest available image model/tool in the active host agent, matching the Sottos editorial cover style without copying exact layouts or text.
-5. Base64 encode the generated image and upload it with `uploadMedia`, including `base64Data`, `fileName`, `mimeType`, and descriptive SEO/accessibility `alt` text. Media is image-only; `alt` is required; captions and credits are optional. Keep the image under 12MB, ideally under 500KB. The server validates and normalizes it to a 1600x1000 WebP cover.
-6. Read related existing posts and pick 2-3 relevant `relatedPosts`.
-7. Create or update posts as drafts using the returned media ID as `coverImage`. Required post fields: `title`, `excerpt`, `coverImage`, and Lexical `content`. Use `_status: "draft"` first. Let `slug` auto-fill unless the user asks for a specific URL. Use `publishedAt` only for user-approved scheduling.
-8. Return the post title, slug, status, cover media ID, and admin URL.
+3. Generate a 16:10 image locally using the strongest available image model/tool in the active host agent, matching the Sottos editorial cover style without copying exact layouts or text.
+4. Base64 encode the generated image and upload it with `uploadMedia`, including `base64Data`, `fileName`, `mimeType`, and descriptive SEO/accessibility `alt` text. Media is image-only; `alt` is required; captions and credits are optional. Keep the image under 12MB, ideally under 500KB. The server validates and normalizes it to a 1600x1000 WebP cover.
+5. Pick 2-3 relevant `relatedPosts` from `getBlogDraftContext`.
+6. Create or update posts as drafts using the returned media ID as `coverImage`. Required post fields: `title`, `excerpt`, `coverImage`, and Lexical `content`. Use `_status: "draft"` first. Let `slug` auto-fill unless the user asks for a specific URL. Use `publishedAt` only for user-approved scheduling.
+7. Return the post title, slug, status, cover media ID, and admin URL.
 
 ## Delete / Unpublish Workflow
 
