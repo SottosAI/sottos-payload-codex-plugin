@@ -25,7 +25,7 @@ If discovery shows the MCP server is unauthenticated, ask the user to run:
 codex mcp login sottos-payload
 ```
 
-This should open a browser window for Clerk login. Do not ask for an API key. Clerk OAuth is required.
+This should open Sottos admin login. If an admin session exists, it uses `https://sottos-web.vercel.app/admin`; otherwise it sends the user to `https://sottos-web.vercel.app/sign-in`. Do not ask for an API key. Clerk OAuth is required.
 
 ## Expected Tools
 
@@ -53,6 +53,7 @@ There should be no users tools. Delete tools should normally be absent. If a del
 - Never create, update, or elevate users.
 - Never print or commit credentials.
 - If auth fails, use the MCP OAuth login flow first: `codex mcp login sottos-payload`.
+- Auth must come from the current Sottos Clerk admin user. Do not use MCP API-key or bearer-token fallback instructions.
 - For new cover images, use the host agent's available image-generation capability first, then upload the resulting local file with `createMedia`.
 - Stay agent-agnostic: Codex/ChatGPT may use built-in image generation; Claude/Cursor should use whatever configured image-generation tool is available. If no image generator is available, write the exact image prompt and stop before creating the post.
 - Do not fall back to REST, SQL, raw `curl`, seed scripts, or local env-secret workflows for media upload unless the user explicitly approves.

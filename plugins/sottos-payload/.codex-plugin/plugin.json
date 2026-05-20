@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "Sottos Payload CMS",
     "shortDescription": "Draft and edit Sottos blog content through Payload MCP.",
-    "longDescription": "Connects Codex to the hosted Sottos Payload CMS MCP server with Clerk OAuth login. Blog-safe workflow: posts, tags, categories, and media can be found, created, and updated; user-management tools are unavailable. Agents should generate cover images with their host image tool, upload them through createMedia, then create rollback-safe post drafts with SEO fields. Publishing should happen only after admin approval.",
+    "longDescription": "Connects Codex to the hosted Sottos Payload CMS MCP server with required Clerk OAuth login through Sottos admin. Blog-safe workflow: posts, tags, categories, and media can be found, created, and updated; user-management tools are unavailable. Agents should generate cover images with their host image tool, upload them through createMedia, then create rollback-safe post drafts with SEO fields. Publishing should happen only after admin approval.",
     "developerName": "Sottos",
     "category": "Productivity",
     "capabilities": [

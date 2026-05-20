@@ -21,7 +21,7 @@ https://sottos-web.vercel.app/api/payload/mcp
 - Upload and update cover images.
 - Manage tags and categories.
 - Read existing posts, media, tags, and categories.
-- Use Sottos Clerk OAuth.
+- Require Sottos Clerk OAuth.
 - Keep post rollback available through Payload drafts/version history.
 
 It should not expose user-management tools.
@@ -45,6 +45,10 @@ codex mcp login sottos-payload
 
 Then relaunch Codex and enable `Sottos Payload CMS` if it is not already on.
 To update later, run the same three commands again.
+
+OAuth should open Sottos admin login. If you already have an active admin
+session, it uses `https://sottos-web.vercel.app/admin`; otherwise it sends you
+to `https://sottos-web.vercel.app/sign-in`.
 
 ## Install In Claude Code
 
@@ -130,6 +134,7 @@ https://sottos-web.vercel.app/.well-known/oauth-protected-resource
 
 ## Auth Notes
 
-- OAuth is preferred.
+- OAuth is required. MCP API keys are not supported.
+- Login must use the current Sottos Clerk admin user.
 - Only current Sottos admins should receive write tools.
 - Treat OAuth login like admin access.
