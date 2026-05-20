@@ -1,0 +1,21 @@
+{
+  "name": "sottos",
+  "interface": {
+    "displayName": "Sottos Plugins"
+  },
+  "plugins": [
+    {
+      "name": "sottos-payload",
+      "source": {
+        "source": "local",
+        "path": "./plugins/sottos-payload"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
+

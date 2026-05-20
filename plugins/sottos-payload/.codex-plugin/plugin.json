@@ -1,0 +1,43 @@
+{
+  "name": "sottos-payload",
+  "version": "0.1.0",
+  "description": "Codex plugin for the hosted Sottos Payload CMS MCP server.",
+  "author": {
+    "name": "Sottos",
+    "email": "admin@sottos.ai",
+    "url": "https://sottos-web.vercel.app"
+  },
+  "homepage": "https://sottos-web.vercel.app/admin",
+  "repository": "https://github.com/kaankolcu/sottos-payload-codex-plugin",
+  "license": "UNLICENSED",
+  "keywords": [
+    "sottos",
+    "payload",
+    "cms",
+    "mcp",
+    "blog"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Sottos Payload CMS",
+    "shortDescription": "Draft and edit Sottos blog content through Payload MCP.",
+    "longDescription": "Connects Codex to the hosted Sottos Payload CMS MCP server with a blog-safe workflow: posts, tags, and categories can be found, created, and updated; media can be found; delete and user-management tools are intentionally unavailable.",
+    "developerName": "Sottos",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://sottos-web.vercel.app",
+    "privacyPolicyURL": "https://sottos-web.vercel.app/privacy",
+    "termsOfServiceURL": "https://sottos-web.vercel.app/terms",
+    "defaultPrompt": [
+      "Use Sottos Payload CMS to list current blog post titles.",
+      "Create a draft Sottos blog post with tags and categories.",
+      "Update an existing Sottos blog post draft."
+    ],
+    "brandColor": "#111111"
+  }
+}
+
