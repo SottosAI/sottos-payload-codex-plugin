@@ -1,6 +1,6 @@
 # Sottos Payload Codex Plugin
 
-Private Codex plugin for the hosted Sottos Payload CMS MCP server.
+Public Codex plugin for the hosted Sottos Payload CMS MCP server.
 
 ## What It Adds
 
@@ -14,6 +14,8 @@ Private Codex plugin for the hosted Sottos Payload CMS MCP server.
 - No users tools.
 
 ## Install In Codex
+
+No GitHub access is needed once this repository is public.
 
 ```bash
 codex plugin marketplace add kaankolcu/sottos-payload-codex-plugin
