@@ -39,7 +39,7 @@ This should open Sottos admin login. If an admin session exists, it uses `https:
 - `createCategories`
 - `updateCategories`
 - `findMedia`
-- `createMedia`
+- `uploadMedia`
 - `updateMedia`
 
 There should be no users tools. Delete tools should normally be absent. If a delete tool is ever exposed, do not call it until the user explicitly confirms the exact post/media/tag/category to delete in the current conversation.
@@ -54,7 +54,7 @@ There should be no users tools. Delete tools should normally be absent. If a del
 - Never print or commit credentials.
 - If auth fails, use the MCP OAuth login flow first: `codex mcp login sottos-payload`.
 - Auth must come from the current Sottos Clerk admin user. Do not use MCP API-key or bearer-token fallback instructions.
-- For new cover images, use the host agent's available image-generation capability first, then upload the resulting local file with `createMedia`.
+- For new cover images, use the host agent's available image-generation capability first, base64 encode the resulting local image, then upload it with `uploadMedia`.
 - Stay agent-agnostic: Codex/ChatGPT may use built-in image generation; Claude/Cursor should use whatever configured image-generation tool is available. If no image generator is available, write the exact image prompt and stop before creating the post.
 - Do not fall back to REST, SQL, raw `curl`, seed scripts, or local env-secret workflows for media upload unless the user explicitly approves.
 - Preserve rollback: Sottos posts use Payload drafts/version history. Do not hard-delete or overwrite published content when a draft/update path is available.
@@ -88,7 +88,7 @@ Find a post by slug:
 1. Search tags and categories first.
 2. Create missing tags/categories only when needed.
 3. For posts needing a new cover image, generate a 16:10 image locally using the active host agent's image tool.
-4. Upload the generated image with `createMedia`, including descriptive SEO/accessibility alt text. Media is image-only; `alt` is required; `caption` and `credit` are optional. Keep the file reasonably small before upload.
+4. Base64 encode the generated image and upload it with `uploadMedia`, including `base64Data`, `fileName`, `mimeType`, and descriptive SEO/accessibility `alt` text. Media is image-only; `alt` is required; captions and credits are optional. Keep the image under 12MB, ideally under 500KB.
 5. Read related existing posts and pick 2-3 relevant `relatedPosts`.
 6. Create or update posts as drafts using the returned media ID as `coverImage`. Required post fields: `title`, `excerpt`, `coverImage`, and Lexical `content`. Use `_status: "draft"` first. Let `slug` auto-fill unless the user asks for a specific URL. Use `publishedAt` only for user-approved scheduling.
 7. Return the post title, slug, status, cover media ID, and admin URL.

@@ -98,7 +98,7 @@ Ask the agent for a draft. It should:
 
 1. Read existing tags/categories.
 2. Generate a 16:10 cover image with its available image tool.
-3. Upload the image with descriptive alt text.
+3. Base64 encode the image and upload it with `uploadMedia` and descriptive alt text.
 4. Create the post as a draft.
 5. Add SEO title, description, internal links, related posts, and reading time.
 6. Return the draft title, slug, status, media id, and admin URL.
@@ -109,8 +109,9 @@ stop before creating the post.
 Post drafts need: title, excerpt, cover image, and body content. Slugs can
 auto-fill from the title. Future `publishedAt` dates schedule publishing.
 
-Media uploads are image-only. Alt text is required; captions and credits are
-optional. Keep covers reasonably small before upload.
+Media uploads are image-only. Use `uploadMedia`, not generated `createMedia`,
+for new files. Alt text is required; captions and credits are optional. Keep
+covers under 12MB, ideally under 500KB.
 
 ## Verify
 
