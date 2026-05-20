@@ -3,7 +3,7 @@
     "sottos-payload": {
       "type": "http",
       "url": "https://sottos-web.vercel.app/api/payload/mcp",
-      "note": "Private Sottos Payload CMS MCP server. Authenticates with Clerk OAuth through the MCP client login flow, with Payload MCP API keys as fallback. Expected tools: posts/tags/categories/media find/create/update. Users tools must not be exposed. Delete tools should normally stay disabled; if enabled later, clients must confirm before use and prefer draft/unpublish rollback paths."
+      "note": "Private Sottos Payload CMS MCP server. Authenticates with Clerk OAuth through the MCP client login flow. Expected tools: posts/tags/categories/media find/create/update. Users tools must not be exposed. Delete tools should normally stay disabled; if enabled later, clients must confirm before use and prefer draft/unpublish rollback paths."
     }
   }
 }

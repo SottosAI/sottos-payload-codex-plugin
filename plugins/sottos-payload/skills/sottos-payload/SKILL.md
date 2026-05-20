@@ -25,7 +25,7 @@ If discovery shows the MCP server is unauthenticated, ask the user to run:
 codex mcp login sottos-payload
 ```
 
-This should open a browser window for Clerk login. Do not ask for an API key unless OAuth is unavailable or the user explicitly wants the MCP API-key fallback.
+This should open a browser window for Clerk login. Do not ask for an API key. Clerk OAuth is required.
 
 ## Expected Tools
 

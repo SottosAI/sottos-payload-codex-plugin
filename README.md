@@ -21,7 +21,7 @@ https://sottos-web.vercel.app/api/payload/mcp
 - Upload and update cover images.
 - Manage tags and categories.
 - Read existing posts, media, tags, and categories.
-- Use Sottos Clerk OAuth or a Payload MCP API key.
+- Use Sottos Clerk OAuth.
 - Keep post rollback available through Payload drafts/version history.
 
 It should not expose user-management tools.
@@ -57,14 +57,6 @@ claude mcp add-json sottos-payload \
 
 Then run `/mcp`, select `sottos-payload`, and sign in with Sottos Clerk.
 
-API key fallback:
-
-```bash
-claude mcp add --transport http sottos-payload \
-  https://sottos-web.vercel.app/api/payload/mcp \
-  --header "Authorization: Bearer YOUR_MCP_API_KEY"
-```
-
 ## Install In Claude Desktop / Claude.ai
 
 OAuth:
@@ -75,9 +67,6 @@ OAuth:
 4. Name: `Sottos Payload CMS`
 5. URL: `https://sottos-web.vercel.app/api/payload/mcp`
 6. Sign in when Sottos Clerk opens.
-
-API key fallback: use the same URL and add an `Authorization: Bearer YOUR_MCP_API_KEY`
-header if your client asks for headers instead of OAuth.
 
 ## Install In Cursor
 
@@ -97,21 +86,6 @@ Then authenticate:
 
 ```bash
 cursor-agent mcp login sottos-payload
-```
-
-API key fallback:
-
-```json
-{
-  "mcpServers": {
-    "sottos-payload": {
-      "url": "https://sottos-web.vercel.app/api/payload/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_MCP_API_KEY"
-      }
-    }
-  }
-}
 ```
 
 ## Creating Blog Posts
@@ -157,8 +131,5 @@ https://sottos-web.vercel.app/.well-known/oauth-protected-resource
 ## Auth Notes
 
 - OAuth is preferred.
-- API keys are for fallback or automation.
-- To create an API key: open Sottos admin -> MCP -> API Keys, create a key,
-  enable only needed blog permissions, then copy it once.
 - Only current Sottos admins should receive write tools.
-- Treat OAuth login and MCP API keys like admin access.
+- Treat OAuth login like admin access.
