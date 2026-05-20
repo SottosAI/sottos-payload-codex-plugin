@@ -98,11 +98,11 @@ cursor-agent mcp login sottos-payload
 
 Ask the agent for a draft. It should:
 
-1. Read existing tags/categories.
-2. Call `getBlogDraftContext` to get posts, tags, categories, and cover references in one request.
+1. Call `getBlogDraftContext` to get posts, tags, categories, and cover references in one request.
+2. Create missing tags/categories only when needed.
 3. Generate a 16:10 cover image with the best image model/tool available in the current agent.
-4. Base64 encode the image and upload it with `uploadMedia` and descriptive alt text.
-5. Create the post as a draft.
+4. Base64 encode the original generated image and upload it with `uploadMedia` and descriptive alt text.
+5. Create the post as a draft with `draft: true` and `_status: "draft"`.
 6. Add SEO title, description, internal links, related posts, and reading time.
 7. Return the draft title, slug, status, media id, and admin URL.
 
@@ -117,7 +117,8 @@ cover reference images. Avoid reading full post bodies unless explicitly needed.
 
 Media uploads are image-only. Use `uploadMedia`, not generated `createMedia`,
 for new files. Alt text is required; captions and credits are optional. Uploads
-are normalized server-side to 1600x1000 WebP covers. Keep inputs under 12MB.
+are normalized server-side to 1600x1000 WebP covers. Keep inputs under 12MB;
+do not downscale or recompress first unless the generated file is too large.
 
 ## Verify
 

@@ -3,7 +3,7 @@
     "sottos-payload": {
       "type": "http",
       "url": "https://sottos-web.vercel.app/api/payload/mcp",
-      "note": "Private Sottos Payload CMS MCP server. Requires Clerk OAuth through the MCP client login flow; API keys are not supported. OAuth opens https://sottos-web.vercel.app/admin when an admin session exists, otherwise https://sottos-web.vercel.app/sign-in. Expected tools: posts/tags/categories/media find/update/create where safe, getBlogDraftContext for compact inventory and cover references, getMediaReferences for cover-image references, plus uploadMedia for normalized base64 image uploads. Users tools must not be exposed. Delete tools should normally stay disabled; if enabled later, clients must confirm before use and prefer draft/unpublish rollback paths."
+      "note": "Private Sottos Payload CMS MCP server. Requires Clerk OAuth through the MCP client login flow; API keys are not supported. OAuth opens https://sottos-web.vercel.app/admin when an admin session exists, otherwise https://sottos-web.vercel.app/sign-in. Expected tools: posts/tags/categories/media find/update/create where safe, getBlogDraftContext for compact inventory and cover references, getMediaReferences for cover-image references, plus uploadMedia for normalized base64 image uploads. Create post drafts with top-level draft:true and _status:\"draft\". Users tools must not be exposed. Delete tools should normally stay disabled; if enabled later, clients must confirm before use and prefer draft/unpublish rollback paths."
     }
   }
 }
