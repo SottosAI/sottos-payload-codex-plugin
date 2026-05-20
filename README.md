@@ -97,7 +97,7 @@ cursor-agent mcp login sottos-payload
 Ask the agent for a draft. It should:
 
 1. Read existing tags/categories.
-2. Generate a 16:10 cover image with its available image tool.
+2. Generate a 16:10 cover image with the best image model/tool available in the current agent.
 3. Base64 encode the image and upload it with `uploadMedia` and descriptive alt text.
 4. Create the post as a draft.
 5. Add SEO title, description, internal links, related posts, and reading time.

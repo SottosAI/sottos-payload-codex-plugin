@@ -54,8 +54,8 @@ There should be no users tools. Delete tools should normally be absent. If a del
 - Never print or commit credentials.
 - If auth fails, use the MCP OAuth login flow first: `codex mcp login sottos-payload`.
 - Auth must come from the current Sottos Clerk admin user. Do not use MCP API-key or bearer-token fallback instructions.
-- For new cover images, use the host agent's available image-generation capability first, base64 encode the resulting local image, then upload it with `uploadMedia`.
-- Stay agent-agnostic: Codex/ChatGPT may use built-in image generation; Claude/Cursor should use whatever configured image-generation tool is available. If no image generator is available, write the exact image prompt and stop before creating the post.
+- For new cover images, use the best image-generation model/tool available in the current host agent first, base64 encode the resulting local image, then upload it with `uploadMedia`.
+- Stay agent-agnostic: Codex/ChatGPT should use their strongest available image-generation capability; Claude/Cursor should use the best configured image-generation tool or connected image MCP available. If no image generator is available, write the exact image prompt and stop before creating the post.
 - Do not fall back to REST, SQL, raw `curl`, seed scripts, or local env-secret workflows for media upload unless the user explicitly approves.
 - Preserve rollback: Sottos posts use Payload drafts/version history. Do not hard-delete or overwrite published content when a draft/update path is available.
 - Include SEO fields on blog drafts: meta title, meta description, cover image alt text, internal links, related posts, tags, category, and reading time when possible.
@@ -87,7 +87,7 @@ Find a post by slug:
 
 1. Search tags and categories first.
 2. Create missing tags/categories only when needed.
-3. For posts needing a new cover image, generate a 16:10 image locally using the active host agent's image tool.
+3. For posts needing a new cover image, generate a 16:10 image locally using the strongest available image model/tool in the active host agent.
 4. Base64 encode the generated image and upload it with `uploadMedia`, including `base64Data`, `fileName`, `mimeType`, and descriptive SEO/accessibility `alt` text. Media is image-only; `alt` is required; captions and credits are optional. Keep the image under 12MB, ideally under 500KB.
 5. Read related existing posts and pick 2-3 relevant `relatedPosts`.
 6. Create or update posts as drafts using the returned media ID as `coverImage`. Required post fields: `title`, `excerpt`, `coverImage`, and Lexical `content`. Use `_status: "draft"` first. Let `slug` auto-fill unless the user asks for a specific URL. Use `publishedAt` only for user-approved scheduling.
