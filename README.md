@@ -117,8 +117,9 @@ cover reference images. Avoid reading full post bodies unless explicitly needed.
 
 Media uploads are image-only. Use `uploadMedia`, not generated `createMedia`,
 for new files. Alt text is required; captions and credits are optional. Uploads
-are normalized server-side to 1600x1000 WebP covers. Keep inputs under 12MB;
-do not downscale or recompress first unless the generated file is too large.
+are normalized server-side to 1600x1000 WebP covers. Use the original generated
+image at 1400x875 or larger; low-res, downscaled, or recompressed files are
+rejected so the blog never upscales blurry covers. Keep inputs under 12MB.
 
 ## Verify
 
