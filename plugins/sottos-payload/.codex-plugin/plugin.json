@@ -1,7 +1,7 @@
 {
   "name": "sottos-payload",
-  "version": "0.1.0",
-  "description": "Codex plugin for the hosted Sottos Payload CMS MCP server.",
+  "version": "0.2.0",
+  "description": "Codex plugin for the Clerk-authenticated Sottos Payload CMS MCP server.",
   "author": {
     "name": "Sottos",
     "email": "admin@sottos.ai",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "Sottos Payload CMS",
     "shortDescription": "Draft and edit Sottos blog content through Payload MCP.",
-    "longDescription": "Connects Codex to the hosted Sottos Payload CMS MCP server with a blog-safe workflow: posts, tags, and categories can be found, created, and updated; media can be found; delete and user-management tools are intentionally unavailable.",
+    "longDescription": "Connects Codex to the hosted Sottos Payload CMS MCP server with Clerk OAuth login and a blog-safe workflow: posts, tags, and categories can be found, created, and updated; media can be found; delete and user-management tools are intentionally unavailable.",
     "developerName": "Sottos",
     "category": "Productivity",
     "capabilities": [
@@ -37,7 +37,8 @@
       "Create a draft Sottos blog post with tags and categories.",
       "Update an existing Sottos blog post draft."
     ],
-    "brandColor": "#111111"
+    "brandColor": "#111111",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png"
   }
 }
-

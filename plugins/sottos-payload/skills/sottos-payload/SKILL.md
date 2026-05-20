@@ -17,6 +17,14 @@ sottos-payload Payload CMS blog posts
 
 Do not fall back to REST, SQL, or raw `curl` until MCP discovery has been tried.
 
+If discovery shows the MCP server is unauthenticated, ask the user to run:
+
+```bash
+codex mcp login sottos-payload
+```
+
+This should open a browser window for Clerk login. Do not ask for an API key unless the server explicitly still uses legacy API-key auth.
+
 ## Expected Tools
 
 - `findPosts`
@@ -38,8 +46,8 @@ There should be no delete tools and no users tools.
 - Prefer `select` to keep reads small.
 - Never delete content.
 - Never create, update, or elevate users.
-- Never print or commit the MCP API key.
-- If auth fails, ask the user to create or rotate a key in `/admin -> MCP -> API Keys`.
+- Never print or commit credentials.
+- If auth fails, use the MCP OAuth login flow first: `codex mcp login sottos-payload`.
 
 ## Common Reads
 
@@ -69,4 +77,3 @@ Find a post by slug:
 2. Create missing tags/categories only when needed.
 3. Create or update posts as drafts.
 4. Return the post title, slug, status, and admin URL.
-

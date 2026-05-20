@@ -28,33 +28,13 @@ Config fallback:
 enabled = true
 ```
 
-Then set the MCP token:
+Then authenticate:
 
 ```bash
-export SOTTOS_PAYLOAD_MCP_TOKEN="<payload-mcp-api-key>"
+codex mcp login sottos-payload
 ```
 
-For Codex Desktop on macOS:
-
-```bash
-launchctl setenv SOTTOS_PAYLOAD_MCP_TOKEN "<payload-mcp-api-key>"
-```
-
-Fully quit and reopen Codex.
-
-## Get An API Key
-
-1. Open `https://sottos-web.vercel.app/admin`.
-2. Sign in as a Clerk-backed admin.
-3. Go to `MCP -> API Keys`.
-4. Create a key linked to your admin user.
-5. Enable only blog-safe permissions:
-   - posts: find, create, update
-   - tags: find, create, update
-   - categories: find, create, update
-   - media: find
-6. Do not enable delete permissions.
-7. Put the key in `SOTTOS_PAYLOAD_MCP_TOKEN`.
+Codex should open a browser window. Sign in with a Clerk account that is admin in Sottos.
 
 ## Verify
 
@@ -72,7 +52,7 @@ mcp__sottos_payload__
 
 ## Security
 
-- Treat the API key like a password.
-- Never commit the key.
-- Revoke leaked keys in `/admin -> MCP -> API Keys`.
-- Access depends on the linked Clerk user still being admin in Supabase.
+- No API key should be needed for the normal plugin flow.
+- Treat the browser OAuth login like admin access.
+- Access depends on the Clerk user still being admin in Supabase.
+- Admin role is checked server-side on every MCP request.

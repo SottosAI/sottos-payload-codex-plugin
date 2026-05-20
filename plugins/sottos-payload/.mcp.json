@@ -3,9 +3,7 @@
     "sottos-payload": {
       "type": "http",
       "url": "https://sottos-web.vercel.app/api/payload/mcp",
-      "bearer_token_env_var": "SOTTOS_PAYLOAD_MCP_TOKEN",
-      "note": "Private Sottos Payload CMS MCP server. Requires SOTTOS_PAYLOAD_MCP_TOKEN. Expected tools: posts/tags/categories find/create/update and media find. Delete and users tools must not be exposed."
+      "note": "Private Sottos Payload CMS MCP server. Authenticates with Clerk OAuth through the MCP client login flow. Expected tools: posts/tags/categories find/create/update and media find. Delete and users tools must not be exposed."
     }
   }
 }
-
