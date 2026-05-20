@@ -19,6 +19,15 @@ Private Codex plugin for the hosted Sottos Payload CMS MCP server.
 codex plugin marketplace add kaankolcu/sottos-payload-codex-plugin
 ```
 
+Then enable `Sottos Payload CMS` from the Codex plugin UI.
+
+Config fallback:
+
+```toml
+[plugins."sottos-payload@sottos"]
+enabled = true
+```
+
 Then set the MCP token:
 
 ```bash
@@ -67,4 +76,3 @@ mcp__sottos_payload__
 - Never commit the key.
 - Revoke leaked keys in `/admin -> MCP -> API Keys`.
 - Access depends on the linked Clerk user still being admin in Supabase.
-
