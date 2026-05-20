@@ -1,81 +1,87 @@
 # Sottos Payload MCP Plugin
 
-Hosted Sottos Payload CMS MCP connector, packaged as a Codex plugin and usable
-from Claude Code, Claude Desktop/Claude.ai, and Cursor.
+Connect AI tools to the Sottos blog CMS.
 
-## What It Adds
+Works with:
 
-- MCP server: `sottos-payload`
-- Safe blog tools only:
-  - posts: find, create, update
-  - tags: find, create, update
-  - categories: find, create, update
-  - media: find, create, update
-- No delete tools.
-- No users tools.
-- Clerk OAuth opens Sottos login; only current Sottos admins get tools.
+- Codex plugin marketplace
+- Claude Code
+- Claude Desktop / Claude.ai
+- Cursor
 
-## Image Workflow
+Server URL:
 
-For new posts, agents should generate cover images with the host's available
-image tool, upload the local file through MCP `createMedia`, then create a
-draft post with that media id.
+```text
+https://sottos-web.vercel.app/api/payload/mcp
+```
 
-Examples:
+## What It Can Do
 
-- Codex / ChatGPT: built-in image generation.
-- Claude Code / Desktop: any configured image-generation tool.
-- Cursor: any configured image model/tool.
+- Create and update blog drafts.
+- Upload and update cover images.
+- Manage tags and categories.
+- Read existing posts, media, tags, and categories.
+- Use Sottos Clerk OAuth or a Payload MCP API key.
+- Keep post rollback available through Payload drafts/version history.
 
-If no image generator is available, write the exact cover prompt and stop
-before creating the post.
+It should not expose user-management tools.
+
+Not exposed through this MCP plugin today: site settings, redirects, search
+index management, or direct user/admin management.
+
+Delete tools are intentionally not exposed. If delete support is ever enabled,
+the agent must ask for explicit confirmation first and prefer moving a post
+back to draft/unpublished instead.
 
 ## Install In Codex
 
-No GitHub access is needed once this repository is public.
+Fresh install or update:
 
 ```bash
-codex plugin marketplace add kaankolcu/sottos-payload-codex-plugin
-```
-
-Then enable `Sottos Payload CMS` from the Codex plugin UI.
-
-Config fallback:
-
-```toml
-[plugins."sottos-payload@sottos"]
-enabled = true
-```
-
-Then authenticate:
-
-```bash
+codex plugin marketplace remove sottos
+codex plugin marketplace add SottosAI/sottos-payload-codex-plugin
 codex mcp login sottos-payload
 ```
 
-Codex should open a browser window. Sign in with a Clerk account that is admin in Sottos.
+Then relaunch Codex and enable `Sottos Payload CMS` if it is not already on.
+To update later, run the same three commands again.
 
 ## Install In Claude Code
+
+OAuth:
 
 ```bash
 claude mcp add-json sottos-payload \
   '{"type":"http","url":"https://sottos-web.vercel.app/api/payload/mcp"}'
 ```
 
-Then run `/mcp` in Claude Code and authenticate `sottos-payload`.
+Then run `/mcp`, select `sottos-payload`, and sign in with Sottos Clerk.
+
+API key fallback:
+
+```bash
+claude mcp add --transport http sottos-payload \
+  https://sottos-web.vercel.app/api/payload/mcp \
+  --header "Authorization: Bearer YOUR_MCP_API_KEY"
+```
 
 ## Install In Claude Desktop / Claude.ai
 
-Settings -> Connectors -> Add custom connector:
+OAuth:
 
-- Name: `Sottos Payload CMS`
-- URL: `https://sottos-web.vercel.app/api/payload/mcp`
+1. Open Settings.
+2. Open Connectors.
+3. Add custom connector.
+4. Name: `Sottos Payload CMS`
+5. URL: `https://sottos-web.vercel.app/api/payload/mcp`
+6. Sign in when Sottos Clerk opens.
 
-Complete the OAuth flow when Clerk opens.
+API key fallback: use the same URL and add an `Authorization: Bearer YOUR_MCP_API_KEY`
+header if your client asks for headers instead of OAuth.
 
 ## Install In Cursor
 
-Add this to `~/.cursor/mcp.json` or project `.cursor/mcp.json`:
+Add this to `~/.cursor/mcp.json` or `.cursor/mcp.json`:
 
 ```json
 {
@@ -93,23 +99,66 @@ Then authenticate:
 cursor-agent mcp login sottos-payload
 ```
 
-## Verify
+API key fallback:
 
-Ask Codex:
-
-```text
-Use Sottos Payload CMS to list the available MCP tools. Do not create or update anything.
+```json
+{
+  "mcpServers": {
+    "sottos-payload": {
+      "url": "https://sottos-web.vercel.app/api/payload/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_MCP_API_KEY"
+      }
+    }
+  }
+}
 ```
 
-Expected native namespace after discovery:
+## Creating Blog Posts
+
+Ask the agent for a draft. It should:
+
+1. Read existing tags/categories.
+2. Generate a 16:10 cover image with its available image tool.
+3. Upload the image with descriptive alt text.
+4. Create the post as a draft.
+5. Add SEO title, description, internal links, related posts, and reading time.
+6. Return the draft title, slug, status, media id, and admin URL.
+
+No image tool available? The agent should give you the exact cover prompt and
+stop before creating the post.
+
+Post drafts need: title, excerpt, cover image, and body content. Slugs can
+auto-fill from the title. Future `publishedAt` dates schedule publishing.
+
+Media uploads are image-only. Alt text is required; captions and credits are
+optional. Keep covers reasonably small before upload.
+
+## Verify
+
+Ask:
+
+```text
+Use Sottos Payload CMS to list current blog posts. Do not create or update anything.
+```
+
+Expected namespace in Codex:
 
 ```text
 mcp__sottos_payload__
 ```
 
-## Security
+OAuth metadata should be available at:
 
-- No API key should be needed for the normal plugin flow.
-- Treat the browser OAuth login like admin access.
-- Access depends on the Clerk user still being admin in Supabase.
-- Admin role is checked server-side on every MCP request.
+```text
+https://sottos-web.vercel.app/.well-known/oauth-protected-resource
+```
+
+## Auth Notes
+
+- OAuth is preferred.
+- API keys are for fallback or automation.
+- To create an API key: open Sottos admin -> MCP -> API Keys, create a key,
+  enable only needed blog permissions, then copy it once.
+- Only current Sottos admins should receive write tools.
+- Treat OAuth login and MCP API keys like admin access.
