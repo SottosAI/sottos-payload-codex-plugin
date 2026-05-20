@@ -37,6 +37,8 @@ This should open a browser window for Clerk login. Do not ask for an API key unl
 - `createCategories`
 - `updateCategories`
 - `findMedia`
+- `createMedia`
+- `updateMedia`
 
 There should be no delete tools and no users tools.
 
@@ -48,6 +50,9 @@ There should be no delete tools and no users tools.
 - Never create, update, or elevate users.
 - Never print or commit credentials.
 - If auth fails, use the MCP OAuth login flow first: `codex mcp login sottos-payload`.
+- For new cover images, use the host agent's available image-generation capability first, then upload the resulting local file with `createMedia`.
+- Stay agent-agnostic: Codex/ChatGPT may use built-in image generation; Claude/Cursor should use whatever configured image-generation tool is available. If no image generator is available, write the exact image prompt and stop before creating the post.
+- Do not fall back to REST, SQL, raw `curl`, seed scripts, or local env-secret workflows for media upload unless the user explicitly approves.
 
 ## Common Reads
 
@@ -75,5 +80,7 @@ Find a post by slug:
 
 1. Search tags and categories first.
 2. Create missing tags/categories only when needed.
-3. Create or update posts as drafts.
-4. Return the post title, slug, status, and admin URL.
+3. For posts needing a new cover image, generate a 16:10 image locally using the active host agent's image tool.
+4. Upload the generated image with `createMedia`, including descriptive SEO/accessibility alt text.
+5. Create or update posts as drafts using the returned media ID as `coverImage`.
+6. Return the post title, slug, status, cover media ID, and admin URL.

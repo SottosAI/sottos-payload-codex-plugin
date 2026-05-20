@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "Sottos Payload CMS",
     "shortDescription": "Draft and edit Sottos blog content through Payload MCP.",
-    "longDescription": "Connects Codex to the hosted Sottos Payload CMS MCP server with Clerk OAuth login and a blog-safe workflow: posts, tags, and categories can be found, created, and updated; media can be found; delete and user-management tools are intentionally unavailable.",
+    "longDescription": "Connects Codex to the hosted Sottos Payload CMS MCP server with Clerk OAuth login and a blog-safe workflow: posts, tags, categories, and media can be found, created, and updated; delete and user-management tools are intentionally unavailable. Agents should generate cover images with their host image tool, upload them through createMedia, then create post drafts.",
     "developerName": "Sottos",
     "category": "Productivity",
     "capabilities": [
@@ -34,7 +34,7 @@
     "termsOfServiceURL": "https://sottos-web.vercel.app/terms",
     "defaultPrompt": [
       "Use Sottos Payload CMS to list current blog post titles.",
-      "Create a draft Sottos blog post with tags and categories.",
+      "Generate a cover image, upload it, and create a draft Sottos blog post with tags and categories.",
       "Update an existing Sottos blog post draft."
     ],
     "brandColor": "#111111",
