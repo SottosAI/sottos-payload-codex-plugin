@@ -27,6 +27,8 @@ codex mcp login sottos-payload
 
 This should open Sottos admin login. If an admin session exists, it uses `https://sottos-web.vercel.app/admin`; otherwise it sends the user to `https://sottos-web.vercel.app/sign-in`. Do not ask for an API key. Clerk OAuth is required.
 
+After a successful login, clients should keep access via OAuth refresh tokens. If auth repeatedly expires after about an hour, the server deployment is stale and should be updated before asking the user to log in again.
+
 ## Expected Tools
 
 - `findPosts`

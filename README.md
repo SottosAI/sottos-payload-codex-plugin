@@ -37,7 +37,7 @@ back to draft/unpublished instead.
 
 ## Install In Codex
 
-Fresh install or update:
+Fresh install:
 
 ```bash
 codex plugin marketplace remove sottos
@@ -46,11 +46,20 @@ codex mcp login sottos-payload
 ```
 
 Then relaunch Codex and enable `Sottos Payload CMS` if it is not already on.
-To update later, run the same three commands again.
+
+Normal update:
+
+```bash
+codex plugin marketplace add SottosAI/sottos-payload-codex-plugin
+```
+
+Only remove the marketplace first if the local plugin cache is broken. Removing
+it can require logging in again.
 
 OAuth should open Sottos admin login. If you already have an active admin
 session, it uses `https://sottos-web.vercel.app/admin`; otherwise it sends you
-to `https://sottos-web.vercel.app/sign-in`.
+to `https://sottos-web.vercel.app/sign-in`. After login, OAuth refresh tokens
+keep the MCP session alive without hourly browser re-auth.
 
 ## Install In Claude Code
 
