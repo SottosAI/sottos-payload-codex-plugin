@@ -110,7 +110,7 @@ Ask the agent for a draft. It should:
 1. Call `getBlogDraftContext` to get posts, tags, categories, and cover references in one request.
 2. Create missing tags/categories only when needed.
 3. Generate a 16:10 cover image with the best image model/tool available in the current agent.
-4. Base64 encode the original generated image and upload it with `uploadMedia` and descriptive alt text.
+4. For production covers, call `createMediaSourceUpload`, upload the original local image bytes to the signed URL, then call `uploadMedia` with the returned `sourceUrl` and descriptive alt text.
 5. Create the post as a draft with `draft: true` and `_status: "draft"`.
 6. Add SEO title, description, internal links, related posts, and reading time.
 7. Return the draft title, slug, status, media id, and admin URL.
@@ -124,11 +124,13 @@ auto-fill from the title. Future `publishedAt` dates schedule publishing.
 Use `getBlogDraftContext` before drafting. It returns compact inventory and
 cover reference images. Avoid reading full post bodies unless explicitly needed.
 
-Media uploads are image-only. Use `uploadMedia`, not generated `createMedia`,
-for new files. Alt text is required; captions and credits are optional. Uploads
-are normalized server-side to 1600x1000 WebP covers. Use the original generated
-image at 1400x875 or larger; low-res, downscaled, or recompressed files are
-rejected so the blog never upscales blurry covers. Keep inputs under 12MB.
+Media uploads are image-only. Use `createMediaSourceUpload` plus
+`uploadMedia.sourceUrl` for production covers; keep `base64Data` for small
+diagnostics only. Alt text is required; captions and credits are optional.
+Uploads are normalized server-side to 1600x1000 WebP covers. Use the original
+generated image at 1400x875 or larger; low-res, downscaled, upscaled, or
+recompressed files are rejected so the blog never upscales blurry covers. Keep
+inputs under 12MB.
 
 ## Verify
 

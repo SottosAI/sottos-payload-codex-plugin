@@ -43,6 +43,7 @@ After a successful login, clients should keep access via OAuth refresh tokens. I
 - `getBlogDraftContext`
 - `findMedia`
 - `getMediaReferences`
+- `createMediaSourceUpload`
 - `uploadMedia`
 - `updateMedia`
 
@@ -60,8 +61,9 @@ There should be no users tools. Delete tools should normally be absent. If a del
 - Auth must come from the current Sottos Clerk admin user. Do not use MCP API-key or bearer-token fallback instructions.
 - For new draft posts, call `getBlogDraftContext` first. It replaces separate inventory reads and returns cover-image style references.
 - Do not read full existing post bodies just to learn the content shape. Build Lexical content directly with root/paragraph/heading/list/link nodes.
-- For new cover images, use the references from `getBlogDraftContext`, then use the best image-generation model/tool available in the current host agent, base64 encode the resulting local image, and upload it with `uploadMedia`.
-- Upload the generated image as-is unless it exceeds 12MB. Source images must be at least 1400x875 pixels. Do not downscale or recompress first; `uploadMedia` normalizes covers server-side to 1600x1000 WebP and rejects low-resolution derivatives to prevent blurry covers.
+- For new cover images, use the references from `getBlogDraftContext`, then use the best image-generation model/tool available in the current host agent.
+- Production covers: call `createMediaSourceUpload`, upload the original local image bytes to the returned signed `uploadUrl`, then call `uploadMedia` with the returned `sourceUrl`. Use base64 only for small diagnostics or when signed source upload is unavailable.
+- Upload the generated image as-is unless it exceeds 12MB. Source images must be at least 1400x875 pixels. Do not downscale, upscale, or recompress first; `uploadMedia` normalizes covers server-side to 1600x1000 WebP and rejects low-resolution derivatives to prevent blurry covers.
 - If the image tool only produced a smaller file, regenerate at a higher resolution or stop before creating the post. Never upscale a small image locally just to pass validation.
 - Stay agent-agnostic: Codex/ChatGPT should use their strongest available image-generation capability; Claude/Cursor should use the best configured image-generation tool or connected image MCP available. If no image generator is available, write the exact image prompt and stop before creating the post.
 - Do not fall back to REST, SQL, raw `curl`, seed scripts, or local env-secret workflows for media upload unless the user explicitly approves.
@@ -96,7 +98,7 @@ Find a post by slug:
 1. Call `getBlogDraftContext` first. If unavailable, fall back to compact `findPosts`, `findTags`, `findCategories`, and `getMediaReferences`.
 2. Create missing tags/categories only when needed.
 3. Generate a 16:10 image locally using the strongest available image model/tool in the active host agent, matching the Sottos editorial cover style without copying exact layouts or text.
-4. Base64 encode the original generated image and upload it with `uploadMedia`, including `base64Data`, `fileName`, `mimeType`, and descriptive SEO/accessibility `alt` text. Media is image-only; `alt` is required; captions and credits are optional. Keep the image under 12MB and at least 1400x875 pixels. The server validates and normalizes it to a 1600x1000 WebP cover.
+4. For production covers, call `createMediaSourceUpload` with `fileName`, `mimeType`, and optional `contentLength`; upload the original local image bytes to the returned signed `uploadUrl`; then call `uploadMedia` with `sourceUrl`, `fileName`, `mimeType`, and descriptive SEO/accessibility `alt` text. Use `base64Data` only for small diagnostics or when signed source upload is unavailable. Media is image-only; `alt` is required; captions and credits are optional. Keep the image under 12MB and at least 1400x875 pixels. The server validates and normalizes it to a 1600x1000 WebP cover.
 5. Pick 2-3 relevant `relatedPosts` from `getBlogDraftContext`.
 6. Create or update posts as drafts using the returned media ID as `coverImage`. Required post fields: `title`, `excerpt`, `coverImage`, and Lexical `content`. Pass top-level `draft: true` and set `_status: "draft"`. Let `slug` auto-fill unless the user asks for a specific URL. Use `publishedAt` only for user-approved scheduling.
 7. Return the post title, slug, status, cover media ID, and admin URL.

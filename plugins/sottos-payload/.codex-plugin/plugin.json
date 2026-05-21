@@ -1,6 +1,6 @@
 {
   "name": "sottos-payload",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Codex plugin for the Clerk-authenticated Sottos Payload CMS MCP server.",
   "author": {
     "name": "Sottos",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "Sottos Payload CMS",
     "shortDescription": "Draft and edit Sottos blog content through Payload MCP.",
-    "longDescription": "Connects Codex to the hosted Sottos Payload CMS MCP server with required Clerk OAuth login through Sottos admin. Blog-safe workflow: posts, tags, categories, and media can be found, created, and updated; user-management tools are unavailable. Agents should fetch compact draft context once, generate cover images with the best image model/tool available in the current host, upload original high-resolution images through uploadMedia, then create rollback-safe post drafts with draft:true plus SEO fields. Low-resolution/downscaled covers are rejected. OAuth sessions use refresh tokens; publishing should happen only after admin approval.",
+    "longDescription": "Connects Codex to the hosted Sottos Payload CMS MCP server with required Clerk OAuth login through Sottos admin. Blog-safe workflow: posts, tags, categories, and media can be found, created, and updated; user-management tools are unavailable. Agents should fetch compact draft context once, generate cover images with the best image model/tool available in the current host, upload original high-resolution images through createMediaSourceUpload plus uploadMedia.sourceUrl, then create rollback-safe post drafts with draft:true plus SEO fields. Low-resolution/downscaled covers are rejected. OAuth sessions use refresh tokens; publishing should happen only after admin approval.",
     "developerName": "Sottos",
     "category": "Productivity",
     "capabilities": [
